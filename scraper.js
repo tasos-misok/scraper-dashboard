@@ -75,6 +75,10 @@ const scrapePageForSite = async (page, url, siteConfig) => {
                         ? product.querySelector(config.selectors.link).href
                         : null;
         // Δεν χρησιμοποιούμε if (name && price && link), ώστε να συμπεριλάβουμε όλα τα προϊόντα.
+        if (name === null || price === null || link === null) {
+          return; // Παράλειψη αυτού του στοιχείου.
+        }
+
         results.push({ name, price, stock, link, site: config.name });
       });
       return results;
