@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <td>${row.Site || ''}</td>
         <td>${row.Name || ''}</td>
         <td>${row.Price || ''}</td>
-        <td>${row.Stock || ''}</td>
+        <td>${stockDisplay || ''}</td>
         <td><a href="${row.Link || '#'}" target="_blank">View</a></td>
       `;
       tableBody.appendChild(tr);
