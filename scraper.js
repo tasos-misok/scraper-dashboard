@@ -44,7 +44,7 @@ const sites = [
       link: 'bdi a'
     },
     step: 1,
-    maxPages: 3
+    // maxPages: 3
   }
 ];
 
