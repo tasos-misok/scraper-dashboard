@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function populateTable(data) {
     const tableBody = document.getElementById("productTable").getElementsByTagName("tbody")[0];
     data.forEach(row => {
-      const stockDisplay = row.Stock === "Not Fetched" ? "Unknown" : row.Stock;
+      const stockDisplay = (row.Stock && row.Stock.trim().toLowerCase() === "not fetched") ? "Unknown" : row.Stock;
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${row.Site || ''}</td>
