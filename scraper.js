@@ -127,22 +127,39 @@ const scrapeAllSites = async () => {
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
-  let allProducts = [];
+  // let allProducts = [];
 
-  for (const siteConfig of sites) {
-    const products = await scrapeSite(browser, siteConfig);
-    allProducts = allProducts.concat(products);
+
+  // for (const siteConfig of sites) {
+  //   const products = await scrapeSite(browser, siteConfig);
+  //   allProducts = allProducts.concat(products);
+  // }
+
+  try {
+
+    const scrapePromises = sites.map(siteConfig => scrapeSite(browser, siteConfig));
+
+    const results = await Promise.all(scrapePromises);
+
+    const allProducts = results.flat();
+
+    await browser.close();
+
+    const headers = 'Site,Name,Price,Stock,Link\n';
+    const rows = allProducts.map(product =>
+      `"${product.site}","${product.name}","${product.price}","${product.stock}","${product.link}"\n`
+    );
+    const csvContent = headers + rows.join('\n');
+    fs.writeFileSync('multi_site_products.csv', csvContent, 'utf-8');
+    console.log('Data saved to multi_site_products.csv');
+    
+  } catch (error) {
+    console.error('Error scraping sites:', error);
+    await browser.close();
   }
 
-  await browser.close();
 
-  const headers = 'Site,Name,Price,Stock,Link\n';
-  const rows = allProducts.map(product =>
-    `"${product.site}","${product.name}","${product.price}","${product.stock}","${product.link}"\n`
-  );
-  const csvContent = headers + rows.join('\n');
-  fs.writeFileSync('multi_site_products.csv', csvContent, 'utf-8');
-  console.log('Data saved to multi_site_products.csv');
+  
 };
 
 scrapeAllSites();
